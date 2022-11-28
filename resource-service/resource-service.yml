@@ -1,0 +1,52 @@
+# service configuration
+server:
+  port: 0
+logging:
+  level:
+    root: DEBUG
+    org:
+      hibernate: INFO
+      hibernate.SQL: DEBUG
+      hibernate.cache: DEBUG
+      hibernate.stat: DEBUG
+
+# multipart configuration
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
+      location: src/main/resources/temp/files/
+  datasource:
+    url: jdbc:postgresql://localhost:5432/resource_service
+    username: microservice_foundation
+    password: microservice_foundation
+    driver-class-name: org.postgresql.Driver
+    maxIdle: 30
+    maxWait: 10000
+    maxActive: 100
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# cloud configuration
+aws:
+  s3:
+    endpoint: https://s3.amazonaws.com/
+    bucket-name: resource-service
+    profile: administrator
+    max.retry: 3
+
+# kafka configuration
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    resources: resources
+    partitions.count: 3
+    replication.factor: 3
