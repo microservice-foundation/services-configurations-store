@@ -17,8 +17,9 @@ spring:
                 redis-rate-limiter.replenishRate: 10   # how many requests per second you want a user to be allowed to do
                 redis-rate-limiter.burstCapacity: 20   # the maximum number of requests a user is allowed to do in a single second.
                 redis-rate-limiter.requestedTokens: 1  # how many tokens a request costs. This is the number of tokens taken from the bucket for each request and defaults to 1.
+            - SetPath=/api/v1/resources
         - id: post-resources
-          uri: lb://${resource.service.name}/api/v1
+          uri: lb://${resource.service.name}
           predicates:
             - Method=POST
             - Path=/resources
@@ -27,6 +28,8 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+            - SetPath=/api/v1/resources
         - id: delete-resources
           uri: lb://${resource.service.name}/api/v1
           predicates:
@@ -39,6 +42,7 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
+            - SetPath=/api/v1/resources
         - id: get-songs
           uri: lb://${song.service.name}/api/v1
           predicates:
