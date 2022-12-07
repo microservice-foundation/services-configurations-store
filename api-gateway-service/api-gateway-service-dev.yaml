@@ -7,7 +7,7 @@ spring:
     gateway:
       routes:
         - id: get-resources
-          uri: lb://${resource.service.name}/api/v1
+          uri: lb://${resource.service.name}
           predicates:
             - Method=GET
             - Path=/resources/{id}
@@ -17,7 +17,7 @@ spring:
                 redis-rate-limiter.replenishRate: 10   # how many requests per second you want a user to be allowed to do
                 redis-rate-limiter.burstCapacity: 20   # the maximum number of requests a user is allowed to do in a single second.
                 redis-rate-limiter.requestedTokens: 1  # how many tokens a request costs. This is the number of tokens taken from the bucket for each request and defaults to 1.
-            - SetPath=/api/v1/resources
+            - SetPath=/api/v1/resources/{id}
         - id: post-resources
           uri: lb://${resource.service.name}
           predicates:
@@ -31,7 +31,7 @@ spring:
                 redis-rate-limiter.requestedTokens: 1
             - SetPath=/api/v1/resources
         - id: delete-resources
-          uri: lb://${resource.service.name}/api/v1
+          uri: lb://${resource.service.name}
           predicates:
             - Query=id
             - Method=DELETE
@@ -44,7 +44,7 @@ spring:
                 redis-rate-limiter.requestedTokens: 1
             - SetPath=/api/v1/resources
         - id: get-songs
-          uri: lb://${song.service.name}/api/v1
+          uri: lb://${song.service.name}
           predicates:
             - Method=GET
             - Path=/songs/{id}
@@ -54,8 +54,9 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
+            - SetPath=/api/v1/songs/{id}
         - id: post-songs
-          uri: lb://${song.service.name}/api/v1
+          uri: lb://${song.service.name}
           predicates:
             - Method=POST
             - Path=/songs
@@ -65,6 +66,7 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
+            - SetPath=/api/v1/songs
         - id: delete-songs
           uri: lb://${song.service.name}/api/v1
           predicates:
@@ -77,3 +79,4 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
+            - SetPath=/api/v1/songs
