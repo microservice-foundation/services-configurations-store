@@ -1,5 +1,6 @@
-song.service.name: ${SONG_SERVICE_NAME:song-service}
-resource.service.name: ${RESOURCE_SERVICE_NAME:resource-service}
+song.service.name: ${SONG_SERVICE_NAME:SONG-SERVICE}
+resource.service.name: ${RESOURCE_SERVICE_NAME:RESOURCE-SERVICE}
+logging.level.root: DEBUG
 
 spring:
   cloud:
@@ -26,7 +27,6 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
         - id: delete-resources
           uri: lb://${resource.service.name}/api/v1
           predicates:
@@ -73,5 +73,3 @@ spring:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
-              
-server.port: 0

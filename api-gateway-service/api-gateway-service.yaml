@@ -1,5 +1,6 @@
-ong.service.name: ${SONG_SERVICE_NAME:song-service}
-resource.service.name: ${RESOURCE_SERVICE_NAME:resource-service}
+song.service.name: ${SONG_SERVICE_NAME:SONG-SERVICE}
+resource.service.name: ${RESOURCE_SERVICE_NAME:RESOURCE-SERVICE}
+logging.level.root: DEBUG
 
 spring:
   cloud:
@@ -15,6 +16,7 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 10   # how many requests per second you want a user to be allowed to do
                 redis-rate-limiter.burstCapacity: 20   # the maximum number of requests a user is allowed to do in a single second.
+                redis-rate-limiter.requestedTokens: 1  # how many tokens a request costs. This is the number of tokens taken from the bucket for each request and defaults to 1.
         - id: post-resources
           uri: lb://${resource.service.name}/api/v1
           predicates:
@@ -36,6 +38,7 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
         - id: get-songs
           uri: lb://${song.service.name}/api/v1
           predicates:
@@ -46,6 +49,7 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
         - id: post-songs
           uri: lb://${song.service.name}/api/v1
           predicates:
@@ -56,6 +60,7 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
         - id: delete-songs
           uri: lb://${song.service.name}/api/v1
           predicates:
@@ -67,4 +72,4 @@ spring:
               args:
                 redis-rate-limiter.replenishRate: 10
                 redis-rate-limiter.burstCapacity: 20
-              
+                redis-rate-limiter.requestedTokens: 1
