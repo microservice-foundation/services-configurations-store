@@ -1,6 +1,4 @@
 # application configuration
-server:
-  port: 0
 logging:
   level:
     root: DEBUG
@@ -9,9 +7,6 @@ logging:
       hibernate.SQL: DEBUG
       hibernate.cache: DEBUG
       hibernate.stat: DEBUG
-
-# eureka configuration
-
 
 # datasource configuration
 spring:
