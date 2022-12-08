@@ -1,0 +1,33 @@
+api-gateway.service.name: ${API_GATEWAY_SERVICE_NAME:api-gateway-service}
+bootstrap-servers-endpoints: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9092,localhost:9093,localhost:9094}
+# kafka configuration
+kafka:
+  bootstrap-servers: ${bootstrap-servers-endpoints}
+  topic:
+    resources: resources
+  consumer:
+    concurrency: 3
+
+# client configuration
+api-gateway.endpoint: lb://${api-gateway.service.name}
+resource-service.accept.mime-type: audio/mpeg
+web-client:
+  connection:
+    timeout: 5000
+  response:
+    timeout: 5000
+  read:
+    timeout: 5000
+  write:
+    timeout: 5000
+
+# retry configuration
+retry:
+  max:
+    attempts: 3
+    delay: 500
+
+# application configuration
+logging:
+ level:
+   root: DEBUG
