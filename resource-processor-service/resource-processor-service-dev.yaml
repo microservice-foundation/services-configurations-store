@@ -26,8 +26,3 @@ retry:
   max:
     attempts: 3
     delay: 500
-
-# application configuration
-logging:
- level:
-   root: DEBUG
