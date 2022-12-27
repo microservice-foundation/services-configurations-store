@@ -11,9 +11,9 @@ logging:
 # datasource configuration
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/song_service
-    username: microservice_foundation
-    password: microservice_foundation
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${DATABASE_NAME:song_service}
+    username: ${POSTGRES_USERNAME:microservice_foundation}
+    password: ${POSTGRES_PASSWORD:microservice_foundation}
     driver-class-name: org.postgresql.Driver
     maxIdle: 30
     maxWait: 10000
