@@ -1,6 +1,5 @@
 # service configuration
-server:
-  port: 0
+server.port: 0
 logging:
   level:
     root: DEBUG
@@ -23,30 +22,29 @@ spring:
       enabled: true
       location: src/main/resources/temp/files/
   datasource:
-    url: jdbc:postgresql://localhost:5432/resource_service
-    username: microservice_foundation
-    password: microservice_foundation
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${DATABASE_NAME:resource_service}
+    username: ${POSTGRES_USERNAME:microservice_foundation}
+    password: ${POSTGRES_PASSWORD:microservice_foundation}
     driver-class-name: org.postgresql.Driver
     maxIdle: 30
     maxWait: 10000
     maxActive: 100
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
+  jpa.hibernate.ddl-auto: create-drop
   database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 # cloud configuration
 aws:
   s3:
-    endpoint: https://s3.amazonaws.com/
-    bucket-name: resource-service
-    profile: administrator
+    endpoint: ${AWS_S3_URL:https://s3.amazonaws.com/}
+    bucket-name: ${AWS_S3_BUCKET:resource-service}
+    profile: ${AWS_PROFILE:administrator}
     max.retry: 3
 
 # kafka configuration
 kafka:
-  bootstrap-servers: localhost:9092
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9091,localhost:9092,localhost:9093}
   topic:
     resources: resources
     partitions.count: 3
     replication.factor: 3
+
