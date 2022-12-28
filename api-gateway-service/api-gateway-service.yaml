@@ -1,6 +1,5 @@
 song.service.name: ${SONG_SERVICE_NAME:SONG-SERVICE}
 resource.service.name: ${RESOURCE_SERVICE_NAME:RESOURCE-SERVICE}
-logging.level.root: DEBUG
 
 spring:
   cloud:
@@ -43,7 +42,7 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
             - SetPath=/api/v1/resources
-            - PostDeleteSong=Id, http://api-gateway-service, /songs/delete-by-resource-id, id, song-metadata
+            - PostDeleteSong=Id, http://${spring.application.name}, /songs/delete-by-resource-id, id, song-metadata
         - id: get-songs
           uri: lb://${song.service.name}
           predicates:
