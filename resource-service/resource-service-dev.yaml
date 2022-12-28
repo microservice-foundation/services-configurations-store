@@ -37,7 +37,6 @@ aws:
   s3:
     endpoint: ${AWS_S3_URL:https://s3.amazonaws.com/}
     bucket-name: ${AWS_S3_BUCKET:resource-service}
-    profile: ${AWS_PROFILE:administrator}
     max.retry: 3
 
 # kafka configuration
