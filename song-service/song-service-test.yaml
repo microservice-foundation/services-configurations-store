@@ -11,14 +11,12 @@ logging:
 # datasource configuration
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${DATABASE_NAME:song_service}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${DATABASE_NAME:song_service}
     username: ${POSTGRES_USERNAME:microservice_foundation}
     password: ${POSTGRES_PASSWORD:microservice_foundation}
     driver-class-name: org.postgresql.Driver
     maxIdle: 30
     maxWait: 10000
     maxActive: 100
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jpa.hibernate.ddl-auto: create-drop
+  database-platform: org.hibernate.dialect.PostgreSQLDialect

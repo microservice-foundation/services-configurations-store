@@ -18,7 +18,5 @@ spring:
     maxIdle: 30
     maxWait: 10000
     maxActive: 100
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jpa.hibernate.ddl-auto: create-drop
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
