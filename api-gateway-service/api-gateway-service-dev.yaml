@@ -42,7 +42,7 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
             - SetPath=/api/v1/resources
-            - PostDeleteSong=Id, http://${spring.application.name}, /songs/delete-by-resource-id, id, song-metadata
+            - PostDeleteSong=id, http://${spring.application.name}, /songs/delete-by-resource-id, id, song-metadata
         - id: get-songs
           uri: lb://${song.service.name}
           predicates:
