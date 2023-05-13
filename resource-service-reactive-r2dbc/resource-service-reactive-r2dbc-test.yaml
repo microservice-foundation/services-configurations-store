@@ -1,0 +1,46 @@
+# service configuration
+server.port: 0
+logging:
+  level:
+    root: DEBUG
+    org:
+      springframework.r2dbc: DEBUG
+
+# multipart configuration
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${DATABASE_NAME:resource_service}
+    username: ${POSTGRES_USERNAME:microservice_foundation}
+    password: ${POSTGRES_PASSWORD:microservice_foundation}
+    initialization-mode: always
+    pool:
+      enabled: true
+      initial-size: 5
+      max-size: 10
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9091,localhost:9092,localhost:9093}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      enable-idempotence: true
+      acks: all
+      max-in-flight-requests-per-connection: 5
+      transactional-id: tx-
+      retries: 99999
+
+
+# cloud configuration
+aws:
+  s3:
+    endpoint: ${AWS_S3_URL:https://s3.amazonaws.com/}
+    bucketName: ${AWS_S3_BUCKET:resource-service}
+    maxRetry: 3
+
+# kafka configuration
+kafka:
+  topic:
+    resources: resources
+    partitions.count: 3
+    replication.factor: 3
+
+
