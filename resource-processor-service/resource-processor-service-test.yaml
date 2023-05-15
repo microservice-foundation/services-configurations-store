@@ -9,8 +9,8 @@ spring:
   kafka:
     consumer:
       bootstrap-servers: ${bootstrap-servers-endpoints}
-      client-id: "${spring.application.name}-consumer"
-      group-id: "${spring.application.name}-group"
+      client-id: ${spring.application.name}-consumer
+      group-id: ${spring.application.name}-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       auto-offset-reset: "earliest"
