@@ -1,16 +1,31 @@
 api-gateway.service.name: ${API_GATEWAY_SERVICE_NAME:api-gateway-service}
 bootstrap-servers-endpoints: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9092,localhost:9093,localhost:9094}
+
 # kafka configuration
-kafka:
-  bootstrap-servers: ${bootstrap-servers-endpoints}
-  topic:
-    resources: resources
-  consumer:
-    concurrency: 3
+topic:
+  name.resource: resources
+
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: ${bootstrap-servers-endpoints}
+      client-id: "${spring.application.name}-consumer"
+      group-id: "${spring.application.name}-group"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: "earliest"
+      enable-auto-commit: false
+      isolation-level: read_committed
+      properties:
+        spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.ResourceRecord
+      retry:
+        backoff:
+          interval: 1000
+          multiplier: 2
+          max-retries: 3
 
 # client configuration
 api-gateway.endpoint: lb://${api-gateway.service.name}
-resource-service.accept.mime-type: audio/mpeg
 web-client:
   connection:
     timeout: 5000
@@ -23,9 +38,12 @@ web-client:
 
 # retry configuration
 retry:
-  max:
-    attempts: 3
-    delay: 500
+  backoff:
+    interval: 1000
+    multiplier: 2
+    max-retries: 3
 
 # application configuration
 logging.level.root: DEBUG
+
+
