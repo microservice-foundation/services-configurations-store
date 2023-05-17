@@ -17,6 +17,7 @@ spring:
       enable-auto-commit: false
       isolation-level: read_committed
       properties:
+        spring.json.trusted.packages: com.epam.training.microservicefoundation.resourceprocessor.model.*    
         spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.ResourceRecord
       retry:
         backoff:
