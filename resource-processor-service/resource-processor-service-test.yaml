@@ -24,6 +24,7 @@ spring:
           interval: 1000
           multiplier: 2
           max-retries: 3
+    properties.spring.json.trusted.packages: com.epam.training.microservicefoundation.resourceprocessor.model.*
 
 # client configuration
 api-gateway.endpoint: lb://${api-gateway.service.name}
