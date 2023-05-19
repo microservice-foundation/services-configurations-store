@@ -18,6 +18,7 @@ spring:
       isolation-level: read_committed
       properties:
         spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false   
         spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.ResourceRecord
       retry:
         backoff:
