@@ -17,14 +17,14 @@ spring:
       enable-auto-commit: false
       isolation-level: read_committed
       properties:
-        spring.json.trusted.packages: *
+        spring.json.trusted.packages: "*"
         spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.ResourceRecord
       retry:
         backoff:
           interval: 1000
           multiplier: 2
           max-retries: 3
-    properties.spring.json.trusted.packages: *
+    properties.spring.json.trusted.packages: "*"
 
 # client configuration
 api-gateway.endpoint: lb://${api-gateway.service.name}
