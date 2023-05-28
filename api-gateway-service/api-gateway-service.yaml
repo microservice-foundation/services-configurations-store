@@ -1,95 +1,22 @@
-song.service.name: ${SONG_SERVICE_NAME:SONG-SERVICE}
-resource.service.name: ${RESOURCE_SERVICE_NAME:RESOURCE-SERVICE}
+api-gateway.service.uri: http://${spring.application.name}
 
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: get-resources
-          uri: lb://${resource.service.name}
-          predicates:
-            - Method=GET
-            - Path=/resources/{id}
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10   # how many requests per second you want a user to be allowed to do
-                redis-rate-limiter.burstCapacity: 20   # the maximum number of requests a user is allowed to do in a single second.
-                redis-rate-limiter.requestedTokens: 1  # how many tokens a request costs. This is the number of tokens taken from the bucket for each request and defaults to 1.
-            - SetPath=/api/v1/resources/{id}
-        - id: post-resources
-          uri: lb://${resource.service.name}
-          predicates:
-            - Method=POST
-            - Path=/resources
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-            - SetPath=/api/v1/resources
-        - id: delete-resources
-          uri: lb://${resource.service.name}
-          predicates:
-            - Query=id
-            - Method=DELETE
-            - Path=/resources
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-            - SetPath=/api/v1/resources
-            - PostDeleteSong=id, http://${spring.application.name}, /songs/delete-by-resource-id, id, song-metadata
-        - id: get-songs
-          uri: lb://${song.service.name}
-          predicates:
-            - Method=GET
-            - Path=/songs/{id}
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-            - SetPath=/api/v1/songs/{id}
-        - id: post-songs
-          uri: lb://${song.service.name}
-          predicates:
-            - Method=POST
-            - Path=/songs
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-            - SetPath=/api/v1/songs
-        - id: delete-songs
-          uri: lb://${song.service.name}
-          predicates:
-            - Query=id
-            - Method=DELETE
-            - Path=/songs
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-            - SetPath=/api/v1/songs
-        - id: delete-songs-by-resource-id
-          uri: lb://${song.service.name}
-          predicates:
-            - Query=id
-            - Method=DELETE
-            - Path=/songs/delete-by-resource-id
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-            - SetPath=/api/v1/songs/delete-by-resource-id
+# song service configuration
+song:
+  service:
+    name: ${SONG_SERVICE_NAME:SONG-SERVICE}
+    path: /api/v1/songs
+    uri: lb://${song.service.name}
+    delete-by-resource-id: /delete-by-resource-id
+
+# resource service configuration
+resource:
+  service:
+    name: ${RESOURCE_SERVICE_NAME:RESOURCE-SERVICE}
+    path: /api/v1/resources
+    uri: lb://${resource.service.name}
+
+# rate limiter configuration
+rate-limiter:
+  replenishRate: 10    # how many requests per second you want a user to be allowed to do
+  burstCapacity: 20    # the maximum number of requests a user is allowed to do in a single second.
+  requestedTokens: 1   # how many tokens a request costs. This is the number of tokens taken from the bucket for each request and defaults to 1.
