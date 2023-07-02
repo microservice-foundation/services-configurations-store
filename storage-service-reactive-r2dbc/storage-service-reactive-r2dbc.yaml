@@ -1,0 +1,24 @@
+# application configuration
+logging:
+  level:
+    root: DEBUG
+    org:
+      springframework.r2dbc: DEBUG
+
+# datasource configuration
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${DATABASE_NAME:storage_service}
+    username: ${POSTGRES_USERNAME:microservice_foundation}
+    password: ${POSTGRES_PASSWORD:microservice_foundation}
+    initialization-mode: always
+    pool:
+      enabled: true
+      initial-size: 5
+      max-size: 10
+
+# cloud configuration
+aws:
+  s3:
+    endpoint: ${AWS_S3_URL:https://s3.amazonaws.com/}
+    maxRetry: 3

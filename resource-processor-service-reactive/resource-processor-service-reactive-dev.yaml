@@ -1,12 +1,25 @@
-api-gateway.service.name: ${API_GATEWAY_SERVICE_NAME:api-gateway-service}
 bootstrap-servers-endpoints: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9092,localhost:9093,localhost:9094}
 
 # kafka configuration
-topic:
-  name.resource: resources
+kafka:
+  topic:
+    resource-staging: resource-staging
+    resource-permanent: resource-permanent
+    properties:
+      partition-count: 3
+      replication-factor: 3
 
 spring:
   kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9091,localhost:9092,localhost:9093}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      enable-idempotence: true
+      acks: all
+      max-in-flight-requests-per-connection: 5
+      transactional-id: tx-
+      retries: 99999
     consumer:
       bootstrap-servers: ${bootstrap-servers-endpoints}
       client-id: ${spring.application.name}-consumer
@@ -17,34 +30,30 @@ spring:
       enable-auto-commit: false
       isolation-level: read_committed
       properties:
-        spring.json.trusted.packages: "*"
-        spring.json.use.type.headers: false   
-        spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.ResourceRecord
+        spring.json.trusted.packages: com.epam.training.microservicefoundation.resourceprocessor.model
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.ResourceStagedEvent
       retry:
         backoff:
           interval: 1000
           multiplier: 2
           max-retries: 3
-    properties.spring.json.trusted.packages: "*"
+  cloud:
+    config:
+      retry:
+        initialInterval: 1000
+        maxInterval: 2000
+        multiplier: 1.1
+        maxAttempts: 3
 
 # client configuration
-api-gateway.endpoint: lb://${api-gateway.service.name}
+api-gateway.service.name: ${API_GATEWAY_SERVICE_NAME:api-gateway-service}
 web-client:
-  connection:
-    timeout: 5000
-  response:
-    timeout: 5000
-  read:
-    timeout: 5000
-  write:
-    timeout: 5000
-
-# retry configuration
-retry:
-  backoff:
-    interval: 1000
-    multiplier: 2
-    max-retries: 3
+  connection-timeout: 5000
+  response-timeout: 5000
+  read-timeout: 5000
+  write-timeout: 5000
+  base-url: lb://${api-gateway.service.name}
 
 # application configuration
 logging.level.root: DEBUG
