@@ -6,7 +6,7 @@ song:
     name: ${SONG_SERVICE_NAME:SONG-SERVICE}
     path: /api/v1/songs
     uri: lb://${song.service.name}
-    delete-by-resource-id: /delete-by-resource-id
+    by-resource-id: /by-resource-id
 
 # resource service configuration
 resource:
@@ -14,6 +14,13 @@ resource:
     name: ${RESOURCE_SERVICE_NAME:RESOURCE-SERVICE}
     path: /api/v1/resources
     uri: lb://${resource.service.name}
+
+# storage service configuration
+storage:
+  service:
+    name: ${STORAGE_SERVICE_NAME:STORAGE-SERVICE}
+    path: /api/v1/storages
+    uri: lb://${storage.service.name}
 
 # rate limiter configuration
 rate-limiter:
