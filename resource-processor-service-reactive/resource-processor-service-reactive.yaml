@@ -1,5 +1,3 @@
-bootstrap-servers-endpoints: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9092,localhost:9093,localhost:9094}
-
 # kafka configuration
 kafka:
   topic:
@@ -9,10 +7,11 @@ kafka:
       partition-count: 3
       replication-factor: 3
 
+bootstrap-servers-endpoints: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9092,localhost:9093,localhost:9094}
 spring:
   kafka:
     producer:
-      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS_ENDPOINTS:localhost:9091,localhost:9092,localhost:9093}
+      bootstrap-servers: ${bootstrap-servers-endpoints}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       enable-idempotence: true
@@ -32,7 +31,7 @@ spring:
       properties:
         spring.json.trusted.packages: com.epam.training.microservicefoundation.resourceprocessor.model
         spring.json.use.type.headers: false
-        spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.ResourceStagedEvent
+        spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.event.ResourceStagedEvent
       retry:
         backoff:
           interval: 1000
@@ -55,5 +54,31 @@ web-client:
   write-timeout: 5000
   base-url: lb://${api-gateway.service.name}
 
+# circuit breaker configuration
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      allowHealthIndicatorToFail: false
+      registerHealthIndicator: true
+      slidingWindowSize: 5
+      minimumNumberOfCalls: 3
+      waitDurationInOpenState: 5000
+      failureRateThreshold: 60
+      permittedNumberOfCallsInHalfOpenState: 2
+      slowCallDurationThreshold: 5000
+      slowCallRateThreshold: 60
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      recordExceptions:
+        - org.springframework.web.reactive.function.client.WebClientResponseException.InternalServerError
+        - org.springframework.web.reactive.function.client.WebClientResponseException.ServiceUnavailable
+        - org.springframework.web.reactive.function.client.WebClientResponseException.BadGateway
+        - org.springframework.web.reactive.function.client.WebClientResponseException.GatewayTimeout
+        - java.io.IOException
+      ignoreExceptions:
+        - org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest
+        - org.springframework.web.reactive.function.client.WebClientResponseException.NotFound
+
 # application configuration
-logging.level.root: DEBUG
+logging.level:
+  root: INFO
+  io.github.resilience4j: DEBUG
