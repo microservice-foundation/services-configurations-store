@@ -25,7 +25,7 @@ spring:
       group-id: ${spring.application.name}-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      auto-offset-reset: "earliest"
+      auto-offset-reset: "latest"
       enable-auto-commit: false
       isolation-level: read_committed
       properties:
@@ -55,30 +55,32 @@ web-client:
   base-url: lb://${api-gateway.service.name}
 
 # circuit breaker configuration
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      allowHealthIndicatorToFail: false
-      registerHealthIndicator: true
-      slidingWindowSize: 5
-      minimumNumberOfCalls: 3
-      waitDurationInOpenState: 5000
-      failureRateThreshold: 60
-      permittedNumberOfCallsInHalfOpenState: 2
-      slowCallDurationThreshold: 5000
-      slowCallRateThreshold: 60
-      automaticTransitionFromOpenToHalfOpenEnabled: true
-      recordExceptions:
-        - org.springframework.web.reactive.function.client.WebClientResponseException.InternalServerError
-        - org.springframework.web.reactive.function.client.WebClientResponseException.ServiceUnavailable
-        - org.springframework.web.reactive.function.client.WebClientResponseException.BadGateway
-        - org.springframework.web.reactive.function.client.WebClientResponseException.GatewayTimeout
-        - java.io.IOException
-      ignoreExceptions:
-        - org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest
-        - org.springframework.web.reactive.function.client.WebClientResponseException.NotFound
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        allowHealthIndicatorToFail: false
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        waitDurationInOpenState: 5000
+        failureRateThreshold: 60
+        permittedNumberOfCallsInHalfOpenState: 2
+        slowCallDurationThreshold: 5000
+        slowCallRateThreshold: 60
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        recordExceptions:
+          - org.springframework.web.reactive.function.client.WebClientResponseException.InternalServerError
+          - org.springframework.web.reactive.function.client.WebClientResponseException.ServiceUnavailable
+          - org.springframework.web.reactive.function.client.WebClientResponseException.BadGateway
+          - org.springframework.web.reactive.function.client.WebClientResponseException.GatewayTimeout
+          - java.io.IOException
+        ignoreExceptions:
+          - org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest
+          - org.springframework.web.reactive.function.client.WebClientResponseException.NotFound
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 5s
+        cancelRunningFuture: false
 
-# application configuration
-logging.level:
-  root: INFO
-  io.github.resilience4j: DEBUG
