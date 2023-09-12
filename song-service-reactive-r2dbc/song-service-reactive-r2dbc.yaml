@@ -1,9 +1,25 @@
+# application configuration
+application:
+  database:
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    name: ${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+server:
+  error:
+    whitelabel:
+      enabled: true
+    include-message: always
+    include-stacktrace: never
+
 # datasource configuration
 spring:
   r2dbc:
-    url: r2dbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${DATABASE_NAME:song_service}
-    username: ${POSTGRES_USERNAME:microservice_foundation}
-    password: ${POSTGRES_PASSWORD:microservice_foundation}
+    url: r2dbc:postgresql://${application.database.host}:${application.database.port}/${application.database.name}
+    username: ${application.database.username}
+    password: ${application.database.password}
     initialization-mode: always
     pool:
       enabled: true

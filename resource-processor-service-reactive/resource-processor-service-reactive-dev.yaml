@@ -29,9 +29,9 @@ spring:
       enable-auto-commit: false
       isolation-level: read_committed
       properties:
-        spring.json.trusted.packages: com.epam.training.microservicefoundation.resourceprocessor.model
+        spring.json.trusted.packages: com.epam.training.microservicefoundation.resourceprocessor.domain
         spring.json.use.type.headers: false
-        spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.model.event.ResourceStagedEvent
+        spring.json.value.default.type: com.epam.training.microservicefoundation.resourceprocessor.domain.event.ResourceStagedEvent
       retry:
         backoff:
           interval: 1000
@@ -83,4 +83,3 @@ resilience4j:
       default:
         timeoutDuration: 5s
         cancelRunningFuture: false
-
